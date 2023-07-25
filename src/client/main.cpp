@@ -60,7 +60,6 @@ int main(int argc, char **argv)
     {
         std::cerr << "command invalid! example: ./ChatClient ip port" << std::endl;
         exit(-1);
-        
     }
 
     // 解析出ip和port
@@ -101,7 +100,7 @@ int main(int argc, char **argv)
     // 主线程用于接受用户的输入，发送数据
     for (;;)
     { // 显示首页面菜单，登录，注册和退出
-        std::cout << "===========================" << std::endl;
+        std::cout << "===========！请输入对应业务的序号！================" << std::endl;
         std::cout << "1. login" << std::endl;
         std::cout << "2. register" << std::endl;
         std::cout << "3. quit" << std::endl;
@@ -271,6 +270,7 @@ void deLoginResponse(json &responsejs)
     { // 登录失败
         std::cerr << responsejs["errmsg"] << std::endl;
         g_isLoginSuccess = false;
+        return;
     }
     else
     {
@@ -464,8 +464,8 @@ void chat(int clientfd, string str)
     js["msg"] = message;
     js["time"] = getCurrentTime();
     string buffer = js.dump();
-    //std::cout << "js: " << js <<" buffer: "<< 
-    //buffer <<" buffer.c_str(): " << buffer.c_str() << std::endl;
+    // std::cout << "js: " << js <<" buffer: "<<
+    // buffer <<" buffer.c_str(): " << buffer.c_str() << std::endl;
 
     int len = send(clientfd, buffer.c_str(), strlen(buffer.c_str()) + 1, 0);
     if (-1 == len)
@@ -562,8 +562,8 @@ void loginout(int clientfd, string)
     }
 }
 
- // 获取系统时间（聊天信息需要添加时间信息）
-std::string  getCurrentTime()
+// 获取系统时间（聊天信息需要添加时间信息）
+std::string getCurrentTime()
 {
     auto nowtime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     struct tm *ptm = localtime(&nowtime);

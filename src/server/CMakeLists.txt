@@ -8,6 +8,7 @@ aux_source_directory(./redis REDIS_LIST)
 
 #指定库的路径
 link_directories(/usr/lib64/mysql/)
+link_directories(/usr/local/lib/)
 
 #根据源文件指定生成可执行文件
 add_executable(ChatServer ${SRC_LIST} ${DB_LIST} ${MODEL_LIST} ${REDIS_LIST})

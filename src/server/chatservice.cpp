@@ -24,6 +24,7 @@ ChatService::ChatService()
     // 连接redis服
     if (_redis.connect())
     {
+        //std::cout << "redis_.connect() is success" << std::endl;
         // 给redis设置回调函数，用户处理redis发现有消息时，调用相应的回调函数进行处理
         _redis.init_notify_handler(std::bind(&ChatService::handleRedisSubscribeMessage, this, _1, _2));
     }
@@ -110,14 +111,11 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js, Timestamp)
                 std::lock_guard<std::mutex> lock(connMutex_);
                 userConnMap_.insert({id, conn});
             }
-
             // id用户登录成功后，将自己的id进行订阅channel(id)
             _redis.subscribe(id);
-
             // 登录成功， 需要将用户的登录状态offline -> online
             user.setState("online");
             userModel_.updateState(user);
-
             json response;
             response["msgid"] = EnMsgType::LOGIN_MSG_ACK;
             response["errno"] = 0;
@@ -283,6 +281,7 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time
 
     // 去数据库查询该用户是在online
     User user = userModel_.query(toid);
+    
     if (user.getState() == "online")
     {
         _redis.publish(toid, js.dump());
@@ -292,6 +291,9 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time
         // 用户不在线，存储离线消息
         offlineMsgModel_.insert(toid, js.dump());
     }
+    
+
+    //offlineMsgModel_.insert(toid, js.dump());
 }
 
 // 添加好友的业务 msgid id friendid

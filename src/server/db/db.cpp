@@ -45,6 +45,7 @@ bool MySQL::update(std::string sql)
         LOG_INFO << "更新失败:" << sql;
         return false;
     }
+    std::cout <<"MySQL::update is success" << std::endl;
     return true;
 }
 // 查询操作 select

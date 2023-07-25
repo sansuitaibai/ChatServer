@@ -69,6 +69,7 @@ bool UserModel::updateState(User user)
     {
         if (mysql.update(sql))
         {
+            std::cout <<"mysql.update" << std::endl;
             return true;
         }
     }

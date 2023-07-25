@@ -82,9 +82,10 @@ bool Redis::subscribe(int channel)
             cerr << "subscribe command failed!" << endl;
             return false;
         }
+        std::cout << "REDIS_OK" << std::endl;
     }
     // redisGetReply
-
+    std::cout << "done: "<< done << " subcribe!" << std::endl;
     return true;
 }
 
